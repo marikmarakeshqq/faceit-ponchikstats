@@ -157,9 +157,9 @@ class MatchCardRenderer:
         if tracked_score is None or opponent_score is None:
             return "Результат неизвестен", (198, 210, 222)
         if tracked_score > opponent_score:
-            return "Победа", (120, 188, 154)
+            return "Win", (120, 188, 154)
         if tracked_score < opponent_score:
-            return "Поражение", (204, 116, 130)
+            return "Loss", (204, 116, 130)
         return "Ничья", (198, 210, 222)
 
     def _fmt_float(self, value: Any, digits: int) -> str:
@@ -212,11 +212,11 @@ class MatchCardRenderer:
 
         team_name = str(team_payload.get("name", "Unknown team"))
         team_score = team_payload.get("score", "?")
-        status_text = "Победитель" if is_winner else "Проигравшие"
+        status_text = "Wins" if is_winner else "Loss"
         status_color = (134, 204, 168) if is_winner else (215, 136, 146)
 
         draw.text((x1 + 18, y1 + 12), team_name, font=title_font, fill=(238, 244, 250))
-        draw.text((x1 + 18, y1 + 42), f"{status_text} | Счёт: {team_score}", font=header_font, fill=status_color)
+        draw.text((x1 + 18, y1 + 42), f"{status_text} | score: {team_score}", font=header_font, fill=status_color)
 
         header_y = y1 + 76
         draw.rounded_rectangle(
@@ -237,12 +237,12 @@ class MatchCardRenderer:
         col_hs_pct = x2 - 82
 
         label_color = (221, 233, 245)
-        draw.text((col_name, header_y + 8), "Игрок", font=header_font, fill=label_color)
-        draw.text((col_rank_elo, header_y + 8), "Ранг(elo)", font=header_font, fill=label_color)
+        draw.text((col_name, header_y + 8), "Player", font=header_font, fill=label_color)
+        draw.text((col_rank_elo, header_y + 8), "Rank(elo)", font=header_font, fill=label_color)
         draw.text((col_k, header_y + 8), "K", font=header_font, fill=label_color)
         draw.text((col_d, header_y + 8), "D", font=header_font, fill=label_color)
         draw.text((col_a, header_y + 8), "A", font=header_font, fill=label_color)
-        draw.text((col_adr, header_y + 8), "СУ/Р", font=header_font, fill=label_color)
+        draw.text((col_adr, header_y + 8), "ADR", font=header_font, fill=label_color)
         draw.text((col_hs, header_y + 8), "HS", font=header_font, fill=label_color)
         draw.text((col_hs_pct, header_y + 8), "HS%", font=header_font, fill=label_color)
 
@@ -325,10 +325,10 @@ class MatchCardRenderer:
         )
 
         draw.text((54, 42), f"{result_text}", font=title_font, fill=result_color)
-        draw.text((56, 98), f"Карта: {map_name}", font=subtitle_font, fill=(211, 224, 238))
-        draw.text((350, 98), f"Счёт: {winner_score} : {loser_score}", font=subtitle_font, fill=(236, 219, 176))
-        draw.text((654, 98), f"Победитель: {winner_name}", font=subtitle_font, fill=(161, 214, 183))
-        draw.text((56, 138), "Статистика всех игроков матча", font=info_font, fill=(179, 196, 214))
+        draw.text((56, 98), f"Map: {map_name}", font=subtitle_font, fill=(211, 224, 238))
+        draw.text((350, 98), f"Score: {winner_score} : {loser_score}", font=subtitle_font, fill=(236, 219, 176))
+        draw.text((654, 98), f"Wins: {winner_name}", font=subtitle_font, fill=(161, 214, 183))
+        draw.text((56, 138), "Players stats", font=info_font, fill=(179, 196, 214))
 
         left_panel = (28, 206, 944, 620)
         right_panel = (976, 206, 1892, 620)
@@ -354,7 +354,7 @@ class MatchCardRenderer:
             row_small_font=panel_row_small_font,
         )
 
-        draw.text((52, 656), f"ID матча: {snapshot.get('match_id', '-')}", font=footer_font, fill=(173, 190, 208))
+        draw.text((52, 656), f"ID : {snapshot.get('match_id', '-')}", font=footer_font, fill=(173, 190, 208))
 
         output_path = self._output_dir / (
             f"{snapshot.get('match_id', 'match')}_{team.get('team_id', 'team')}_{uuid.uuid4().hex[:8]}.png"
