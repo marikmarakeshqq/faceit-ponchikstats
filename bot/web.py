@@ -23,6 +23,14 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(lifespan=lifespan)
 
 
+@app.get("/")
+async def root() -> dict[str, object]:
+    return {
+        "status": "ok",
+        "polling_running": runtime.polling_running,
+    }
+
+
 @app.get("/health")
 async def health() -> dict[str, object]:
     return {
