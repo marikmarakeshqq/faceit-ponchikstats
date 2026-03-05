@@ -23,17 +23,18 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(lifespan=lifespan)
 
 
-@app.get("/")
+def _health_payload() -> dict[str, object]:
+    return {
+        "status": "ok",
+        "polling_running": runtime.polling_running,
+    }
+
+
+@app.api_route("/", methods=["GET", "HEAD", "POST", "OPTIONS"])
 async def root() -> dict[str, object]:
-    return {
-        "status": "ok",
-        "polling_running": runtime.polling_running,
-    }
+    return _health_payload()
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD", "POST", "OPTIONS"])
 async def health() -> dict[str, object]:
-    return {
-        "status": "ok",
-        "polling_running": runtime.polling_running,
-    }
+    return _health_payload()
