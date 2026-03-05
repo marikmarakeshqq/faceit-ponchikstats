@@ -212,7 +212,7 @@ class MatchCardRenderer:
 
         team_name = str(team_payload.get("name", "Unknown team"))
         team_score = team_payload.get("score", "?")
-        status_text = "Wins" if is_winner else "Loss"
+        status_text = "Winner" if is_winner else "Loser"
         status_color = (134, 204, 168) if is_winner else (215, 136, 146)
 
         draw.text((x1 + 18, y1 + 12), team_name, font=title_font, fill=(238, 244, 250))
@@ -327,8 +327,12 @@ class MatchCardRenderer:
         draw.text((54, 42), f"{result_text}", font=title_font, fill=result_color)
         draw.text((56, 98), f"Map: {map_name}", font=subtitle_font, fill=(211, 224, 238))
         draw.text((350, 98), f"Score: {winner_score} : {loser_score}", font=subtitle_font, fill=(236, 219, 176))
-        draw.text((654, 98), f"Wins: {winner_name}", font=subtitle_font, fill=(161, 214, 183))
-        draw.text((56, 138), "Players stats", font=info_font, fill=(179, 196, 214))
+        winner_text = f"{winner_name} wins"
+        winner_text_bbox = draw.textbbox((0, 0), winner_text, font=subtitle_font)
+        winner_text_width = winner_text_bbox[2] - winner_text_bbox[0]
+        winner_text_x = (width - winner_text_width) // 2
+        draw.text((winner_text_x, 98), winner_text, font=subtitle_font, fill=(161, 214, 183))
+        draw.text((56, 138), "", font=info_font, fill=(179, 196, 214))
 
         left_panel = (28, 206, 944, 620)
         right_panel = (976, 206, 1892, 620)
